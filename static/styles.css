@@ -1,0 +1,101 @@
+/* Elimina el margen y el relleno de todos los elementos */
+*{
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo para el cuerpo de la página */
+body{
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-image:
+        linear-gradient(
+            to bottom,
+            #dcdcdc 50%,
+            #e9e9e9 30%      
+        );
+    font-family: sans-serif;
+}
+
+/* Estilo para el elemento principal */
+main{
+    background-color: #e9e9e9;
+    width: 500px;
+    height: 700px;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 30px;
+    box-shadow: 0 30px 50px;
+    box-sizing: border-box;
+    padding: 30px;
+}
+
+/* Estilo para el formulario dentro del elemento principal */
+main form{
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Estilo para los campos de entrada del formulario */
+main form input{
+    width: 90%;
+    border: 3px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: transparent;
+    box-shadow: 2px 3px 4px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+/* Estilo para los botones del formulario */
+main form button {
+    width: 300px;
+    height: 60px;
+    border-radius: 15px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+    background-color: yellowgreen;
+    margin-bottom: 30px;
+}
+
+/* Estilo para los párrafos dentro del elemento principal */
+main p{
+    margin-top: 30px;
+    font-size: 25px;
+    font-weight: bold;
+    color: brown;
+    text-align: center;
+    align-items: center;
+}
+
+/* Estilo para la clase showUser dentro del elemento principal */
+main .showUser{
+    background-image: url('../static/userLogo.png');
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+    margin-top: 20%;
+}
+
+/* Estilo para los encabezados h1 y h2 dentro del elemento principal */
+main h1, h2{
+    text-align: center;
+    margin-top: 20%;
+}

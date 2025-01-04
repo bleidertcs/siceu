@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Define la codificación de caracteres como UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Configura la vista para que sea compatible con dispositivos móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página -->
+    <title>Document</title>
+    <!-- Enlace al archivo de estilos CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Elemento principal de la página -->
+    <main>
+        <!-- Formulario de inicio de sesión que envía datos mediante POST a /login_validation -->
+        <form method="post" action="/login_validation">
+           <!-- Campo de entrada para el email -->
+           <input type="email" name="email" placeholder="Enter email"><br>
+           <!-- Campo de entrada para la contraseña -->
+           <input type="password" name="password" placeholder="Enter password"><br>
+           <!-- Botón para enviar el formulario -->
+           <button type="submit" value="login">login</button>
+        </form>
+        <!-- Párrafo con enlace para crear una cuenta -->
+        <p>Don't have an account <br><a href="#">create account</a></p>
+    </main>
+</body>
+</html>

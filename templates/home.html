@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Define la codificación de caracteres como UTF-8 -->
+    <meta charset="UTF-8">
+    <!-- Configura la vista para que sea compatible con dispositivos móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página -->
+    <title>Document</title>
+    <!-- Enlace al archivo de estilos CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Elemento principal de la página -->
+    <main>
+        <!-- Encabezado que muestra el nombre del usuario -->
+        <h1>Welcome, {{fname}}  {{lname}}</h1>
+        <!-- Encabezado que muestra el email del usuario -->
+        <h2>Email : {{ email }} </h2>
+        <!-- Imagen de usuario con clase showUser -->
+        <img class="showUser">
+    </main>
+</body>
+</html>
