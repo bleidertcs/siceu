@@ -99,3 +99,16 @@ main h1, h2{
     text-align: center;
     margin-top: 20%;
 }
+
+main img{
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    width: 200px;
+    height: 200px;
+    background-image: url('../static/loginLogo.png');
+    background-position: center;
+    background-size: cover;
+    margin-top: 40px;
+    border-radius: 50px;
+}

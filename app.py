@@ -26,6 +26,7 @@ def login_validation():
     user = cursor.execute(
         "SELECT * FROM USERS WHERE email=? AND password=?", (email, password)
     ).fetchall()
+    connection.close()
     
     # Cierra la conexión a la base de datos
     connection.close()
@@ -38,6 +39,10 @@ def login_validation():
     else:
         # Si el usuario no existe, redirige de nuevo a la página de inicio de sesión
         return redirect("/")
+    
+@app.route('/signUp')
+def signup():
+    return render_template('signUp.html')
 
 @app.route("/home")
 def home():
@@ -50,6 +55,27 @@ def home():
 
     # Renderiza la plantilla 'home.html' pasando los valores obtenidos
     return render_template('home.html', fname=fname, lname=lname, email=email)
+
+@app.route('/add_user', methods=['POST'])
+def add_user():
+    fname = request.form.get("fname")
+    lname = request.form.get("lname")
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    connection = sqlite3.connect("LoginData.db")
+    cursor = connection.cursor()
+
+    ans = cursor.execute("select * from users where email=? AND password=?",(email, password )).fetchall()
+
+    if len(ans) > 0:
+        connection.close()
+        return render_template('login.html')
+    else:
+        cursor.execute("INSERT INTO USERS (first_name,last_name,email,password)values(?, ?, ?, ?)", (fname, lname, email,password))
+        connection.commit()
+        connection.close()
+        return render_template('login.html')
 
 if __name__ == "__main__":
     # Ejecuta la aplicación Flask en modo de depuración
