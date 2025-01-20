@@ -1,0 +1,41 @@
+<!-- templates/register.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h2>Register</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.name.label }}
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.last_name.label }}
+        {{ form.last_name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.role.label }}
+        {{ form.role(class="form-control") }}
+    </div>
+   <div class="form-group">
+        {{ form.id_card.label }}
+        {{ form.id_card(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.id_card_type.label }}
+        {{ form.id_card_type(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.email.label }}
+        {{ form.email(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.password.label }}
+        {{ form.password(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.confirm.label }}
+        {{ form.confirm(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+{% endblock %}

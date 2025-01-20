@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+bcrypt
+email_validator
+WTForms
+Werkzeug

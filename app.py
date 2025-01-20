@@ -1,90 +1,70 @@
-from flask import Flask, render_template, request, redirect
-import sqlite3
-import os
+# app.py
+from flask import Flask, render_template, redirect, url_for, session, flash
+from flask_sqlalchemy import SQLAlchemy
+from models import db, User
+from forms import RegistrationForm, LoginForm
+from werkzeug.security import check_password_hash
 
-# Crea una instancia de la aplicación Flask
 app = Flask(__name__)
-# Establece una clave secreta para la sesión
-app.secret_key = os.urandom(24)
+app.config['SECRET_KEY'] = 'abc123'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db.init_app(app)
 
-@app.route("/")
+with app.app_context():
+    db.create_all()
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        existing_user = User.query.filter_by(id_card=form.id_card.data).first()
+        if existing_user:
+          flash('ID card already registered', 'danger')
+          return render_template('register.html', form=form)
+        user = User(name=form.name.data,
+                    last_name=form.last_name.data,
+                    role=form.role.data,
+                    id_card=form.id_card.data,
+                    id_card_type=form.id_card_type.data,
+                    email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Registration successful!', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Renderiza la página de inicio de sesión
-    return render_template("login.html")
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(id_card=form.id_card.data, id_card_type=form.id_card_type.data, role=form.role.data).first()
+        if user and user.check_password(form.password.data):
+            session['user_id'] = user.id
+            flash(f'Welcome, {user.name}!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Login Unsuccessful. Please check your credentials', 'danger')
+    return render_template('login.html', form=form)
 
-@app.route("/login_validation", methods=["POST"])
-def login_validation():
-    # Obtiene el email y la contraseña del formulario de inicio de sesión
-    cedula = request.form.get("cedula")
-    password = request.form.get("password")
-
-    # Conecta a la base de datos SQLite
-    connection = sqlite3.connect("LoginData.db")
-    cursor = connection.cursor()
-
-    # Ejecuta una consulta para verificar si el usuario existe con el email y la contraseña proporcionados
-    user = cursor.execute(
-        "SELECT * FROM USERS WHERE cedula=? AND password=?", (cedula, password)
-    ).fetchall()
-    connection.close()
-    
-    # Cierra la conexión a la base de datos
-    connection.close()
-    
-    # Si el usuario existe, redirige a la página de inicio con los datos del usuario
-    if len(user) > 0:
-        return redirect(
-            f"/home?fname={user[0][0]}&lname={user[0][1]}&cedula={user[0][2]}&tipo_cedula={user[0][3]}&email={user[0][4]}"
-        )
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' in session:
+        user = User.query.filter_by(id=session['user_id']).first()
+        return render_template('dashboard.html', user=user)
     else:
-        # Si el usuario no existe, redirige de nuevo a la página de inicio de sesión
-        return redirect("/")
-    
-@app.route('/signUp')
-def signup():
-    return render_template('signUp.html')
+        return redirect(url_for('login'))
 
-# -----------------------------------------------------------------------------------------------------------------------
-@app.route("/home")
-def home():
-    # Obtiene el nombre del formulario de solicitud
-    fname = request.args.get("fname")
-    # Obtiene el apellido del formulario de solicitud
-    lname = request.args.get("lname")
-    # Obtiene la cedula del formulario
-    cedula = request.args.get("cedula")
-    # Obtiene el tipo de cedula del formulario
-    tipo_cedula = request.args.get("tipo_cedula")
-    # Obtiene el email del formulario de solicitud
-    email = request.args.get("email")
 
-    # Renderiza la plantilla 'home.html' pasando los valores obtenidos
-    return render_template('home.html', fname=fname, lname=lname, cedula=cedula, tipo_cedula=tipo_cedula, email=email)
+@app.route('/logout')
+def logout():
+  session.pop('user_id', None)
+  return redirect(url_for('login'))
 
-# -----------------------------------------------------------------------------------------------------------------------
-@app.route('/add_user', methods=['POST'])
-def add_user():
-    fname = request.form.get("fname")
-    lname = request.form.get("lname")
-    cedula = int(request.form.get("cedula"))
-    tipo_cedula = request.form.get("tipo_cedula")
-    email = request.form.get("email")
-    password = request.form.get("password")
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
 
-    connection = sqlite3.connect("LoginData.db")
-    cursor = connection.cursor()
-
-    ans = cursor.execute("select * from users where cedula=? AND password=?",(cedula, password )).fetchall()
-
-    if len(ans) > 0:
-        connection.close()
-        return render_template('login.html')
-    else:
-        cursor.execute("INSERT INTO USERS (first_name, last_name, cedula, tipo_cedula, email, password ) values ( ?, ?, ?, ?, ?, ?)", (fname, lname, cedula, tipo_cedula, email,password))
-        connection.commit()
-        connection.close()
-        return render_template('login.html')
-
-if __name__ == "__main__":
-    # Ejecuta la aplicación Flask en modo de depuración
+if __name__ == '__main__':
     app.run(debug=True)
