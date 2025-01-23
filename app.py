@@ -20,7 +20,7 @@ def register():
     if form.validate_on_submit():
         existing_user = User.query.filter_by(id_card=form.id_card.data).first()
         if existing_user:
-          flash('ID card already registered', 'danger')
+          flash('La cédula de identidad ya está registrada', 'danger')
           return render_template('register.html', form=form)
         user = User(name=form.name.data,
                     last_name=form.last_name.data,
@@ -31,7 +31,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Registration successful!', 'success')
+        flash('Registro exitoso', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
@@ -42,10 +42,10 @@ def login():
         user = User.query.filter_by(id_card=form.id_card.data, id_card_type=form.id_card_type.data, role=form.role.data).first()
         if user and user.check_password(form.password.data):
             session['user_id'] = user.id
-            flash(f'Welcome, {user.name}!', 'success')
+            flash(f'Bienvenido, {user.name}!', 'success')
             return redirect(url_for('dashboard'))
         else:
-            flash('Login Unsuccessful. Please check your credentials', 'danger')
+            flash('Inicio de sesión fallido, verifique sus credenciales', 'danger')
     return render_template('login.html', form=form)
 
 @app.route('/dashboard')

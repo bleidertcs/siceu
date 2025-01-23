@@ -4,3 +4,5 @@ bcrypt
 email_validator
 WTForms
 Werkzeug
+Flask-Login
+flask_wtf
