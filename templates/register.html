@@ -1,47 +1,64 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header text-center">
-                <h4 class="card-title">Registro</h4>
+{# Esta línea indica que esta plantilla hereda de "base.html", que sería una plantilla base con elementos comunes a
+otras páginas. #}
+
+{% block content %} {# Este bloque define el contenido que se insertará en la plantilla base, dentro del bloque llamado
+"content". #}
+<div class="row justify-content-center mt-5"> {# Un div con clases de Bootstrap para centrar el contenido y darle un
+    margen superior. #}
+    <div class="col-md-4"> {# Un div que ocupa 4 columnas en pantallas medianas y grandes. #}
+        <div class="card"> {# Un div con la clase "card" de Bootstrap para mostrar un contenedor con aspecto de tarjeta.
+            #}
+            <div class="card-header text-center"> {# Un div para el encabezado de la tarjeta, centrado. #}
+                <h4 class="card-title">Registro</h4> {# Un título h4 para el encabezado de la tarjeta que dice
+                "Registro". #}
             </div>
-            <div class="card-body">
-                <form method="post">
-                    {{ form.hidden_tag() }}
-                    <div class="mb-3">
-                        {{ form.name.label }}
-                        {{ form.name(class="form-control") }}
+            <div class="card-body"> {# Un div para el cuerpo de la tarjeta. #}
+                <form method="post"> {# Un formulario que envía los datos al servidor con el método POST. #}
+                    {{ form.hidden_tag() }} {# Un campo oculto generado por Flask-WTF para proteger contra ataques CSRF.
+                    #}
+                    <div class="mb-3"> {# Un div para un grupo de entrada con margen inferior. #}
+                        {{ form.name.label }} {# Etiqueta para el campo "name". #}
+                        {{ form.name(class="form-control") }} {# Campo de texto para el nombre, con la clase
+                        "form-control" de Bootstrap. #}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> {# Estructura similar a la anterior para el campo "last_name" (apellido). #}
                         {{ form.last_name.label }}
                         {{ form.last_name(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> {# Estructura similar a la anterior para el campo "role" (rol). #}
                         {{ form.role.label }}
                         {{ form.role(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> {# Estructura similar a la anterior para el campo "id_card" (cédula de
+                        identidad), pero con un label personalizado. #}
                         <label for="{{ form.id_card.id }}" class="form-label">Cedula de Identidad</label>
-                        <div class="input-group">
-                            {{ form.id_card_type(class="form-select") }}
-                            {{ form.id_card(class="form-control") }}
+                        <div class="input-group"> {# Un div para agrupar dos elementos relacionados. #}
+                            {{ form.id_card_type(class="form-select") }} {# Un campo de selección para el tipo de
+                            documento, con la clase "form-select" de Bootstrap. #}
+                            {{ form.id_card(class="form-control") }} {# Un campo de texto para el número de
+                            identificación. #}
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> {# Estructura similar a la anterior para el campo "email" (correo electrónico).
+                        #}
                         {{ form.email.label }}
                         {{ form.email(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> {# Estructura similar a la anterior para el campo "password" (contraseña), con el
+                        atributo type="password" para ocultar la entrada. #}
                         {{ form.password.label }}
                         {{ form.password(class="form-control", type="password") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> {# Estructura similar a la anterior para el campo "confirm" (confirmar
+                        contraseña). #}
                         {{ form.confirm.label }}
                         {{ form.confirm(class="form-control", type="password") }}
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Register</button>
-                    <a href="{{ url_for('login') }}" class="mt-3 d-block text-center">Iniciar Sesión</a>
+                    <button type="submit" class="btn btn-primary w-100">Register</button> {# Botón para enviar el
+                    formulario, con clases de Bootstrap para darle estilo. #}
+                    <a href="{{ url_for('login') }}" class="mt-3 d-block text-center">Iniciar Sesión</a> {# Enlace a la
+                    página de inicio de sesión. #}
                 </form>
             </div>
         </div>

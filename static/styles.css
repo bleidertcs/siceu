@@ -1,25 +1,44 @@
 body {
   /* add image from mi asstet */
 
+  /* Se establece la imagen de fondo del body. 
+  La ruta  "../static/fondo.png" indica que la imagen se encuentra en la carpeta static un nivel arriba.
+  Puedes intercambiarla con la imagen comentada "klei.png" si así lo deseas */
   background-image: url("../static/fondo.png");
   /* background-image: url("../static/klei.png"); */
+
+  /* Se asegura que la imagen de fondo cubra todo el espacio disponible */
   background-size: cover;
+
+  /* Se centra la imagen de fondo */
   background-position: center;
+
+  /* Se evita que la imagen de fondo se repita */
   background-repeat: no-repeat;
+
+  /* Se establece la altura del body al 100% de la altura de la ventana gráfica (viewport height)*/
   height: 100vh;
 }
 
+/* Se selecciona el elemento con el id "intro" */
 #intro {
+  /* Se establece la altura del elemento al 100% de la altura de la ventana gráfica */
   height: 100vh;
 }
 
-/* Height for devices larger than 576px */
+/* Media query que se aplica en dispositivos con un ancho mínimo de 992px */
 @media (min-width: 992px) {
+  /* Se selecciona el elemento con el id "intro" cuando el ancho de la pantalla es de al menos 992px */
   #intro {
+    /* Se ajusta el margen superior del elemento. Este valor puede modificarse 
+    para ajustar la posición del elemento en la pantalla. */
     margin-top: -58.59px;
   }
 }
 
+/* Se seleccionan todos los enlaces de navegación dentro de la barra de navegación */
 .navbar .nav-link {
+  /* Se establece el color del texto del enlace a blanco. 
+  !important se usa para sobrescribir cualquier otra regla de estilo que afecte al color */
   color: #fff !important;
 }

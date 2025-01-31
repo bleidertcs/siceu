@@ -6,30 +6,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema Estudiantil SICEU</title>
+  <!-- Enlaces a hojas de estilo CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='clima.png') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> {# Enlace a una hoja de estilos
+  personalizada #}
+  <link rel="shortcut icon" href="{{ url_for('static', filename='clima.png') }}" /> {# Enlace al icono de la pestaña #}
 </head>
 
 <body style="background-image: url('../static/fondo.png'); background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
-height: 100vh;">
-  <div class="row">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <a href="{{ url_for('logout') }}" class="btn btn-secondary">Cerrar Sesión</a>
+height: 100vh;"> {# Estilo para el body con una imagen de fondo #}
+  <div class="row"> {# Un div con la clase "row" de Bootstrap para crear una fila. #}
+    <div class="d-flex justify-content-between align-items-center mb-4"> {# Un div con clases de Bootstrap para alinear
+      elementos en la fila. #}
+      <a href="{{ url_for('logout') }}" class="btn btn-secondary">Cerrar Sesión</a> {# Un enlace con la clase "btn
+      btn-secondary" de Bootstrap para darle estilo de botón que dirige a la ruta 'logout'. #}
     </div>
-    <div class="container mt-4" ">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class=" alert alert-{{category}}">{{ message }}</div>
+    <div class="container mt-4" "> {# Un div con la clase " container" de Bootstrap para contener el contenido y darle
+      un margen superior de 4. #} {# Este bloque se utiliza para mostrar mensajes flash al usuario, como mensajes de
+      éxito o error. #} {% with messages=get_flashed_messages(with_categories=true) %} {% if messages %} {% for
+      category, message in messages %} <div class=" alert alert-{{category}}">{{ message }}</div> {# Muestra una alerta
+    con la categoría y el mensaje correspondientes. #}
     {% endfor %}
     {% endif %}
     {% endwith %}
-    {% block content %}{% endblock %}
+    {% block content %}{% endblock %} {# Este bloque se llenará con el contenido de las plantillas hijas que extiendan
+    esta plantilla. #}
   </div>
+  <!-- Enlace a la biblioteca JavaScript de Material Design Bootstrap -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
 </body>
 

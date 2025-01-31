@@ -1,32 +1,50 @@
-{% extends 'base.html' %} {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
-                <form method="post">
-                    {{ form.hidden_tag() }}
+{% extends 'base.html' %} {# Esta línea indica que esta plantilla hereda de "base.html", que sería una plantilla base
+con elementos comunes a otras páginas. #}
 
-                    <div class="mb-3">
-                        <label for="{{ form.id_card.id }}" class="form-label">Cedula de Identidad</label>
-                        <div class="input-group">
-                            {{ form.id_card_type(class="form-select") }}
-                            {{ form.id_card(class="form-control") }}
+{% block content %} {# Este bloque define el contenido que se insertará en la plantilla base, dentro del bloque llamado
+"content". #}
+<div class="row justify-content-center mt-5"> {# Un div con clases de Bootstrap para centrar el contenido y darle un
+    margen superior de 5. #}
+    <div class="col-md-4"> {# Un div que ocupa 4 columnas en pantallas medianas y grandes. #}
+        <div class="card"> {# Un div con la clase "card" de Bootstrap para mostrar un contenedor con aspecto de tarjeta.
+            #}
+            <div class="card-body"> {# Un div para el cuerpo de la tarjeta. #}
+                <h2 class="card-title text-center mb-4">Iniciar Sesión</h2> {# Un título h2 para el encabezado del
+                formulario que dice "Iniciar Sesión", centrado y con un margen inferior de 4. #}
+                <form method="post"> {# Un formulario que envía los datos al servidor con el método POST. #}
+                    {{ form.hidden_tag() }} {# Un campo oculto generado por Flask-WTF para proteger contra ataques CSRF.
+                    #}
+
+                    <div class="mb-3"> {# Un div para un grupo de entrada con margen inferior de 3. #}
+                        <label for="{{ form.id_card.id }}" class="form-label">Cedula de Identidad</label> {# Etiqueta
+                        para el campo "id_card". #}
+                        <div class="input-group"> {# Un div para agrupar dos elementos relacionados. #}
+                            {{ form.id_card_type(class="form-select") }} {# Un campo de selección para el tipo de
+                            documento, con la clase "form-select" de Bootstrap. #}
+                            {{ form.id_card(class="form-control") }} {# Un campo de texto para el número de
+                            identificación, con la clase "form-control" de Bootstrap. #}
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="{{ form.password.id }}" class="form-label">Contraseña</label>
-                        {{ form.password(class="form-control", type="password") }}
+                    <div class="mb-3"> {# Un div para un grupo de entrada con margen inferior de 3. #}
+                        <label for="{{ form.password.id }}" class="form-label">Contraseña</label> {# Etiqueta para el
+                        campo "password". #}
+                        {{ form.password(class="form-control", type="password") }} {# Un campo de contraseña para la
+                        contraseña, con la clase "form-control" de Bootstrap y el atributo type="password" para ocultar
+                        la entrada. #}
                     </div>
 
-                    <div class="mb-3">
-                        <label for="{{ form.role.id }}" class="form-label">Rol</label>
-                        {{ form.role(class="form-select") }}
+                    <div class="mb-3"> {# Un div para un grupo de entrada con margen inferior de 3. #}
+                        <label for="{{ form.role.id }}" class="form-label">Rol</label> {# Etiqueta para el campo "role".
+                        #}
+                        {{ form.role(class="form-select") }} {# Un campo de selección para el rol, con la clase
+                        "form-select" de Bootstrap. #}
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100" x>Iniciar Sesión</button>
-                    <a href="{{ url_for('register') }}" class="mt-3 d-block text-center">Registro</a>
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button> {# Botón para enviar el
+                    formulario, con clases de Bootstrap para darle estilo. #}
+                    <a href="{{ url_for('register') }}" class="mt-3 d-block text-center">Registro</a> {# Enlace a la
+                    página de registro. #}
                 </form>
             </div>
         </div>

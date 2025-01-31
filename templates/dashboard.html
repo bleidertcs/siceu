@@ -1,31 +1,52 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <h2 class="card-title text-center mb-4">UNEFA</h2>
-                    <div class="text-center"> {% if user %} <p class="lead">Bienvenido, <span class="fw-bold">{{
-                                user.name }}</span>!</p>
+{% extends 'base.html' %} {# Esta línea indica que esta plantilla hereda de "base.html", que sería una plantilla base
+con elementos comunes a otras páginas. #}
+
+{% block content %} {# Este bloque define el contenido que se insertará en la plantilla base, dentro del bloque llamado
+"content". #}
+<div class="container mt-5"> {# Un div con la clase "container" de Bootstrap para contener el contenido y darle un
+    margen superior de 5. #}
+    <div class="row"> {# Un div con la clase "row" de Bootstrap para crear una fila. #}
+        <div class="col-md-8 offset-md-2"> {# Un div que ocupa 8 columnas en pantallas medianas y grandes, con un
+            desplazamiento de 2 columnas a la izquierda para centrarlo. #}
+            <div class="card shadow"> {# Un div con la clase "card" de Bootstrap para mostrar un contenedor con aspecto
+                de tarjeta y la clase "shadow" para agregar una sombra. #}
+                <div class="card-body p-5"> {# Un div para el cuerpo de la tarjeta, con un padding de 5 en todos los
+                    lados. #}
+                    <h2 class="card-title text-center mb-4">UNEFA</h2> {# Un título h2 para el encabezado del dashboard
+                    que dice "UNEFA", centrado y con un margen inferior de 4. #}
+                    <div class="text-center">
+                        {# Este bloque condicional verifica si hay un usuario autenticado #}
+                        {% if user %}
+                        <p class="lead">Bienvenido, <span class="fw-bold">{{ user.name }}</span>!</p> {# Si hay un
+                        usuario autenticado, se muestra un mensaje de bienvenida con su nombre. #}
                         {% else %}
-                        <p class="lead">Bienvenido!</p>
+                        <p class="lead">Bienvenido!</p> {# Si no hay un usuario autenticado, se muestra un mensaje de
+                        bienvenida genérico. #}
                         {% endif %}
                     </div>
 
-                    <hr class="my-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-user-graduate fa-3x mb-3 text-primary"></i>
-                                    <h5 class="card-title">Información del Estudiante</h5>
-                                    <p class="card-text">Consulta y actualiza tu información personal.</p>
-                                    <a href="#" class="btn btn-primary">Ver Perfil</a>
+                    <hr class="my-4"> {# Una línea horizontal con un margen superior e inferior de 4. #}
+                    <div class="row"> {# Un div con la clase "row" de Bootstrap para crear una fila. #}
+                        <div class="col-md-6 mb-4"> {# Un div que ocupa 6 columnas en pantallas medianas y grandes, con
+                            un margen inferior de 4. #}
+                            <div class="card h-100"> {# Un div con la clase "card" de Bootstrap para mostrar un
+                                contenedor con aspecto de tarjeta y la clase "h-100" para que ocupe toda la altura
+                                disponible. #}
+                                <div class="card-body text-center"> {# Un div para el cuerpo de la tarjeta, con texto
+                                    centrado. #}
+                                    <i class="fas fa-user-graduate fa-3x mb-3 text-primary"></i> {# Un icono de Font
+                                    Awesome para un estudiante graduado. #}
+                                    <h5 class="card-title">Información del Estudiante</h5> {# Un título h5 para la
+                                    tarjeta que dice "Información del Estudiante". #}
+                                    <p class="card-text">Consulta y actualiza tu información personal.</p> {# Un párrafo
+                                    con texto descriptivo. #}
+                                    <a href="#" class="btn btn-primary">Ver Perfil</a> {# Un enlace con la clase "btn
+                                    btn-primary" de Bootstrap para darle estilo de botón. #}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6 mb-4"> {# Estructura similar a la anterior para la sección de "Materias
+                            Inscritos". #}
                             <div class="card h-100">
                                 <div class="card-body text-center">
                                     <i class="fas fa-book fa-3x mb-3 text-success"></i>
