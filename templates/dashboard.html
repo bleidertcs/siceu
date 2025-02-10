@@ -1,75 +1,88 @@
-{% extends 'base.html' %} {# Esta línea indica que esta plantilla hereda de "base.html", que sería una plantilla base
-con elementos comunes a otras páginas. #}
-
-{% block content %} {# Este bloque define el contenido que se insertará en la plantilla base, dentro del bloque llamado
+{% extends 'base.html' %} {# Esta línea indica que la plantilla actual hereda de "base.html", la plantilla base con
+elementos comunes. #}
+{% block content %} {# Inicia el bloque de contenido que se inserta dentro de la plantilla base en el área denominada
 "content". #}
-<div class="container mt-5"> {# Un div con la clase "container" de Bootstrap para contener el contenido y darle un
-    margen superior de 5. #}
-    <div class="row"> {# Un div con la clase "row" de Bootstrap para crear una fila. #}
-        <div class="col-md-8 offset-md-2"> {# Un div que ocupa 8 columnas en pantallas medianas y grandes, con un
-            desplazamiento de 2 columnas a la izquierda para centrarlo. #}
-            <div class="card shadow"> {# Un div con la clase "card" de Bootstrap para mostrar un contenedor con aspecto
-                de tarjeta y la clase "shadow" para agregar una sombra. #}
-                <div class="card-body p-5"> {# Un div para el cuerpo de la tarjeta, con un padding de 5 en todos los
-                    lados. #}
-                    <h2 class="card-title text-center mb-4">UNEFA</h2> {# Un título h2 para el encabezado del dashboard
-                    que dice "UNEFA", centrado y con un margen inferior de 4. #}
-                    <div class="text-center">
-                        {# Este bloque condicional verifica si hay un usuario autenticado #}
-                        {% if user %}
-                        <p class="lead">Bienvenido, <span class="fw-bold">{{ user.name }}</span>!</p> {# Si hay un
-                        usuario autenticado, se muestra un mensaje de bienvenida con su nombre. #}
-                        {% else %}
-                        <p class="lead">Bienvenido!</p> {# Si no hay un usuario autenticado, se muestra un mensaje de
-                        bienvenida genérico. #}
-                        {% endif %}
-                    </div>
-
-                    <hr class="my-4"> {# Una línea horizontal con un margen superior e inferior de 4. #}
-                    <div class="row"> {# Un div con la clase "row" de Bootstrap para crear una fila. #}
-                        <div class="col-md-6 mb-4"> {# Un div que ocupa 6 columnas en pantallas medianas y grandes, con
-                            un margen inferior de 4. #}
-                            <div class="card h-100"> {# Un div con la clase "card" de Bootstrap para mostrar un
-                                contenedor con aspecto de tarjeta y la clase "h-100" para que ocupe toda la altura
-                                disponible. #}
-                                <div class="card-body text-center"> {# Un div para el cuerpo de la tarjeta, con texto
+<div class="container mt-5"> {# Crea un contenedor Bootstrap con un margen superior de 5 para espaciar el contenido de
+    la parte superior. #}
+    <div class="row"> {# Inicia una fila de Bootstrap para organizar el contenido en una cuadrícula. #}
+        <div class="col-md-8 offset-md-2"> {# Define una columna de 8 unidades en pantallas medianas con un
+            desplazamiento de 2 para centrar el contenido. #}
+            <div class="card shadow"> {# Crea una tarjeta con la clase "card" y añade una sombra ("shadow") para
+                resaltar el contenedor. #}
+                <div class="card-body p-5"> {# Define el cuerpo de la tarjeta con un padding de 5 en todos los lados. #}
+                    <h2 class="card-title text-center mb-4">UNEFA</h2> {# Título de la tarjeta, centrado y con margen
+                    inferior de 4, que muestra "UNEFA". #}
+                    <div class="text-center"> {# Crea un div con texto centrado para el mensaje de bienvenida. #}
+                        {% if user %} {# Comienza la sentencia condicional: Si existe la variable "user" (usuario
+                        autenticado). #}
+                        <p class="lead">Bienvenido, <span class="fw-bold">{{ user.name }}</span>!</p> {# Muestra el
+                        mensaje de bienvenida con el nombre del usuario en negrita. #}
+                        {% else %} {# Sino, en caso de no haber usuario autenticado... #}
+                        <p class="lead">Bienvenido!</p> {# Muestra un mensaje de bienvenida genérico. #}
+                        {% endif %} {# Finaliza la sentencia condicional. #}
+                    </div> {# Cierra el div que centra el mensaje de bienvenida. #}
+                    <hr class="my-4"> {# Inserta una línea horizontal con márgenes verticales de 4 para separar
+                    secciones. #}
+                    <div class="row"> {# Inicia una nueva fila para organizar múltiples tarjetas en columnas. #}
+                        <div class="col-md-6 mb-4"> {# Define una columna que ocupa 6 unidades en pantallas medianas y
+                            agrega un margen inferior de 4. #}
+                            <div class="card h-100"> {# Crea una tarjeta que ocupará el 100% de la altura disponible en
+                                la columna. #}
+                                <div class="card-body text-center"> {# Define el cuerpo de la tarjeta con el contenido
                                     centrado. #}
-                                    <i class="fas fa-user-graduate fa-3x mb-3 text-primary"></i> {# Un icono de Font
-                                    Awesome para un estudiante graduado. #}
-                                    <h5 class="card-title">Información del Estudiante</h5> {# Un título h5 para la
-                                    tarjeta que dice "Información del Estudiante". #}
-                                    <p class="card-text">Consulta y actualiza tu información personal.</p> {# Un párrafo
-                                    con texto descriptivo. #}
-                                    <a href="#" class="btn btn-primary">Ver Perfil</a> {# Un enlace con la clase "btn
-                                    btn-primary" de Bootstrap para darle estilo de botón. #}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4"> {# Estructura similar a la anterior para la sección de "Materias
-                            Inscritos". #}
-                            <div class="card h-100">
-                                <div class="card-body text-center">
-                                    <i class="fa fa-address-book fa-3x mb-3 text-success"></i>
-                                    <h5 class="card-title">Horario de Clases</h5>
-                                    <p class="card-text">Crea tu horario de clases.</p>
-                                    <a href="{{ url_for('horario') }}" class="btn btn-success">Crear Horario</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-book fa-3x mb-3 text-warning"></i>
-                                    <h5 class="card-title">Materias Inscritas</h5>
-                                    <p class="card-text">Revisa los Materias en los que te has inscrito.</p>
-                                    <a href="#" class="btn btn-warning">Mis Materias</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+                                    <i class="fas fa-user-graduate fa-3x mb-3 text-primary"></i> {# Inserta un ícono de
+                                    graduado (Font Awesome), tamaño 3x, con margen inferior de 3 y color primario. #}
+                                    <h5 class="card-title">Información del Estudiante</h5> {# Título de la tarjeta que
+                                    indica la sección de "Información del Estudiante". #}
+                                    <p class="card-text">Consulta y actualiza tu información personal.</p> {# Texto
+                                    descriptivo que invita a revisar y actualizar la información personal. #}
+                                    <a href="#" class="btn btn-primary">Ver Perfil</a> {# Enlace estilizado como botón
+                                    primario que permite ver el perfil del estudiante. #}
+                                </div> {# Cierra el div del cuerpo de la tarjeta. #}
+                            </div> {# Cierra la tarjeta. #}
+                        </div> {# Cierra la columna de "Información del Estudiante". #}
+                        <div class="col-md-6 mb-4"> {# Comienza una nueva columna para la sección "Horario de Clases",
+                            ocupando 6 unidades en pantallas medianas y con margen inferior de 4. #}
+                            <div class="card h-100"> {# Crea una tarjeta que ocupa el 100% de la altura de la columna.
+                                #}
+                                <div class="card-body text-center"> {# Define el cuerpo de la tarjeta con contenido
+                                    centrado. #}
+                                    <i class="fa fa-address-book fa-3x mb-3 text-success"></i> {# Inserta un ícono de
+                                    "agenda" o "libreta" con tamaño 3x, margen inferior de 3 y color de éxito (verde).
+                                    #}
+                                    <h5 class="card-title">Horario de Clases</h5> {# Título de la tarjeta que indica
+                                    "Horario de Clases". #}
+                                    <p class="card-text">Crea tu horario de clases.</p> {# Texto descriptivo que invita
+                                    al usuario a crear su horario de clases. #}
+                                    <a href="{{ url_for('horario') }}" class="btn btn-success">Crear Horario</a> {#
+                                    Enlace estilizado como botón de éxito que redirige a la ruta de "horario" para crear
+                                    el horario de clases. #}
+                                </div> {# Cierra el div del cuerpo de la tarjeta. #}
+                            </div> {# Cierra la tarjeta. #}
+                        </div> {# Cierra la columna de "Horario de Clases". #}
+                        <div class="col-md-6 mb-4"> {# Comienza otra columna para la sección "Materias Inscritas",
+                            ocupando 6 unidades y con margen inferior de 4. #}
+                            <div class="card h-100"> {# Crea una tarjeta que abarca toda la altura disponible de la
+                                columna. #}
+                                <div class="card-body text-center"> {# Define el cuerpo de la tarjeta con texto
+                                    centrado. #}
+                                    <i class="fas fa-book fa-3x mb-3 text-warning"></i> {# Inserta un ícono de libro
+                                    (Font Awesome), tamaño 3x, margen inferior 3 y color de advertencia (amarillo). #}
+                                    <h5 class="card-title">Materias Inscritas</h5> {# Título de la tarjeta que indica
+                                    "Materias Inscritas". #}
+                                    <p class="card-text">Revisa los Materias en los que te has inscrito.</p> {# Texto
+                                    descriptivo que invita al usuario a revisar las materias en las que está inscrito.
+                                    #}
+                                    <a href="#" class="btn btn-warning">Mis Materias</a> {# Enlace estilizado como botón
+                                    de advertencia que, en este ejemplo, redirige a la página de materias inscritas
+                                    (enlace actualmente no funcional). #}
+                                </div> {# Cierra el div del cuerpo de la tarjeta. #}
+                            </div> {# Cierra la tarjeta. #}
+                        </div> {# Cierra la columna de "Materias Inscritas". #}
+                    </div> {# Cierra la fila que contiene las tarjetas. #}
+                </div> {# Cierra el cuerpo interno de la tarjeta principal. #}
+            </div> {# Cierra la tarjeta principal. #}
+        </div> {# Cierra la columna centrada. #}
+    </div> {# Cierra la fila principal. #}
+</div> {# Cierra el contenedor principal. #}
+{% endblock %} {# Finaliza e inserta el bloque de contenido en la plantilla base. #}
