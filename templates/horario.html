@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if horario %}
+<!-- Si el horario ya se generó, se muestra la tabla final generada -->
+<h2 class="text-center mb-4">Horario</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Hora</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in range(horas|length) %}
+        <tr>
+            <td>{{ horas[i] }}</td>
+            {% for dia in dias %}
+            <td>
+                {% for bloque in horario[dia]["bloques"] %}
+                {% if bloque.inicio == horas_formatted[i] %}
+                {{ bloque.nombre }}
+                {% endif %}
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<!-- Si el horario no se ha generado aún, se muestra el formulario para seleccionar materias -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">UNEFA</h2>
+                    <h1>Selección de Materias y Horario</h1>
+
+                    <!-- Formulario para agregar materias y asignarlas a un horario -->
+                    <form method="POST" id="materiasForm">
+                        <div class="mb-3">
+                            <label for="materiasSelect" class="form-label">Materias Disponibles</label>
+                            <select id="materiasSelect" class="form-select">
+                                <option value="">Seleccionar materia</option>
+                                {% for materia in materias %}
+                                <option value="{{ materia.nombre }}" data-dias="{{ materia.dias|join(',') }}">
+                                    {{ materia.nombre }} - {{ materia.profesor }} ({{ materia.dias|join(', ') }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Botón para agregar la materia al horario -->
+                        <button type="button" id="addMateriaBtn" class="btn btn-secondary">Agregar Materia</button>
+
+                        <hr>
+
+                        <!-- Tabla de horario dinámica que muestra la asignación de materias -->
+                        <h3>Vista Previa del Horario</h3>
+                        <table class="table table-bordered" id="tablaMaterias">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Lunes</th>
+                                    <th>Martes</th>
+                                    <th>Miercoles</th>
+                                    <th>Jueves</th>
+                                    <th>Viernes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Se crearán filas dinámicamente al asignar una materia -->
+                            </tbody>
+                        </table>
+
+                        <!-- Botón para guardar y generar el PDF del horario -->
+                        <button type="button" id="guardarBtn" class="btn btn-primary">Guardar y Generar PDF</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script de JavaScript para asignar materias dinámicamente a la tabla del horario -->
+<script>
+    // Mapeo de día a índice de columna en la tabla (0: Hora, 1: Lunes, etc.)
+    const diasMapping = {
+        "Lunes": 1,
+        "Martes": 2,
+        "Miercoles": 3,
+        "Jueves": 4,
+        "Viernes": 5
+    };
+
+    // Función para buscar una fila por la hora en la primera columna
+    function buscarFilaPorHora ( hora )
+    {
+        const tbody = document.getElementById( 'tablaMaterias' ).getElementsByTagName( 'tbody' )[ 0 ];
+        for ( let row of tbody.rows )
+        {
+            if ( row.cells[ 0 ].textContent.trim() === hora.trim() )
+            {
+                return row;
+            }
+        }
+        return null;
+    }
+
+    // Función para crear una nueva fila de horario con la hora especificada
+    function crearFilaHorario ( hora )
+    {
+        const tbody = document.getElementById( 'tablaMaterias' ).getElementsByTagName( 'tbody' )[ 0 ];
+        const row = tbody.insertRow();
+        // Primera celda: la hora
+        const cellHora = row.insertCell( 0 );
+        cellHora.textContent = hora;
+        // Crear las celdas vacías para Lunes a Viernes
+        for ( let i = 1; i <= 5; i++ )
+        {
+            row.insertCell( i ).textContent = "";
+        }
+        return row;
+    }
+
+    // Evento al hacer clic en "Agregar Materia"
+    document.getElementById( 'addMateriaBtn' ).addEventListener( 'click', function ()
+    {
+        const select = document.getElementById( 'materiasSelect' );
+        const selectedOption = select.options[ select.selectedIndex ];
+
+        if ( selectedOption.value !== "" )
+        {
+            const materiaNombre = selectedOption.value;
+            // Obtener los días en los que se imparte la materia; se asume que vienen como "Lunes,Martes" sin espacios.
+            const diasMateria = selectedOption.getAttribute( 'data-dias' ).split( ',' ).map( d => d.trim() );
+
+            // Solicitar al usuario la hora en la cual desea asignar esta materia
+            const horaAsignacion = prompt( `Ingrese la hora para ${ materiaNombre } (ejemplo: "8:00-8:45 AM"):` );
+
+            if ( !horaAsignacion )
+            {
+                alert( 'Debe ingresar una hora válida.' );
+                return;
+            }
+
+            // Buscar la fila existente con esa hora; si no existe, se crea
+            let fila = buscarFilaPorHora( horaAsignacion );
+            if ( !fila )
+            {
+                fila = crearFilaHorario( horaAsignacion );
+            }
+
+            // Por cada día en los que la materia se imparte, asignar la materia en la celda correspondiente
+            diasMateria.forEach( function ( dia )
+            {
+                const colIndex = diasMapping[ dia ];
+                if ( colIndex !== undefined )
+                {
+                    // Si ya hay contenido en la celda, se agrega en una nueva línea
+                    if ( fila.cells[ colIndex ].textContent.trim() !== "" )
+                    {
+                        fila.cells[ colIndex ].innerHTML += "<br>" + materiaNombre;
+                    } else
+                    {
+                        fila.cells[ colIndex ].textContent = materiaNombre;
+                    }
+                }
+            } );
+
+            // Luego de agregar la materia al horario, eliminarla del select para evitar duplicados
+            select.remove( select.selectedIndex );
+            // Resetear el select a la opción por defecto
+            select.selectedIndex = 0;
+        }
+    } );
+
+    // Evento para el botón "Guardar y Generar PDF"
+    document.getElementById( 'guardarBtn' ).addEventListener( 'click', function ()
+    {
+        // Aquí se puede implementar la funcionalidad para generar PDF.
+        // Como ejemplo, se utiliza window.print() que permite imprimir a PDF.
+        window.print();
+    } );
+</script>
+{% endif %}
+
+{% endblock %}
