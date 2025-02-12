@@ -36,37 +36,37 @@ db.init_app(app)
 materias = [
     {
         "nombre": "Matematicas",  # Nombre de la materia
-        "duracion": 90,  # Duración en minutos
+        "hora": ["7:00 - 7:45 AM ", " 7:45 - 8:30 AM"],  # Duración en minutos
         "profesor": "Juan Perez",  # Nombre del profesor
         "dias": ["Lunes", "Miercoles"],  # Días en los que se dicta la materia
     },
     {
         "nombre": "Fisica",
-        "duracion": 90,
+        "hora": ["7:00 - 7:45 AM", "7:45 - 8:30 AM"],
         "profesor": "Julio Parra",
         "dias": ["Martes", "Jueves"],
     },
     {
         "nombre": "Quimica",
-        "duracion": 90,
+        "hora": ["8:30 - 9:15 AM ", " 9:15 - 10:00 AM"],
         "profesor": "Carlos Estrada",
         "dias": ["Lunes", "Viernes"],
     },
     {
         "nombre": "Geometria",
-        "duracion": 90,
+        "hora": ["8:30 - 9:15 AM ", " 9:15 - 10:00 AM"],
         "profesor": "Miguel Espinosa",
         "dias": ["Martes", "Miercoles"],
     },
     {
         "nombre": "Seminario",
-        "duracion": 45,
+        "hora": ["10:00 - 10:45 AM"],
         "profesor": "Andres Suarez",
         "dias": ["Jueves"],
     },
     {
         "nombre": "Ingles",
-        "duracion": 90,
+        "hora": ["8:30 - 9:15 AM", "9:15 - 10:00 AM"],
         "profesor": "Carla Suset",
         "dias": ["Jueves", "Viernes"],
     },

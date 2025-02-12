@@ -16,16 +16,17 @@
 <body style="background-image: url('../static/fondo.png'); background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
-height: 100vh;"> {# Estilo para el body con una imagen de fondo #}
+height: 100vh;"> {# Esto es un Estilo para el body con una imagen de fondo #}
   <div class="row"> {# Un div con la clase "row" de Bootstrap para crear una fila. #}
     <div class="d-flex justify-content-between align-items-center mb-4"> {# Un div con clases de Bootstrap para alinear
       elementos en la fila. #}
-      <a href="{{ url_for('logout') }}" class="btn btn-secondary">Cerrar Sesión</a> {# Un enlace con la clase "btn
+      <a href="{{ url_for('logout') }}" class="btn btn-secondary">Cerrar Sesión</a> {# esto es un enlace con la clase
+      "btn
       btn-secondary" de Bootstrap para darle estilo de botón que dirige a la ruta 'logout'. #}
     </div>
-    <div class="container mt-4" "> {# Un div con la clase " container" de Bootstrap para contener el contenido y darle
-      un margen superior de 4. #} {# Este bloque se utiliza para mostrar mensajes flash al usuario, como mensajes de
-      éxito o error. #} {% with messages=get_flashed_messages(with_categories=true) %} {% if messages %} {% for
+    <div class="container mt-4" "> {# Un div con la clase " container" de Bootstrap para contener el contenido y asi
+      darle un margen superior de 4. #} {# Este bloque se utiliza para mostrar mensajes flash al usuario, como mensajes
+      de éxito o error. #} {% with messages=get_flashed_messages(with_categories=true) %} {% if messages %} {% for
       category, message in messages %} <div class=" alert alert-{{category}}">{{ message }}</div> {# Muestra una alerta
     con la categoría y el mensaje correspondientes. #}
     {% endfor %}

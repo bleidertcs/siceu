@@ -18,7 +18,8 @@ con elementos comunes a otras páginas. #}
                     <div class="mb-3"> {# Un div para un grupo de entrada con margen inferior de 3. #}
                         <label for="{{ form.id_card.id }}" class="form-label">Cedula de Identidad</label> {# Etiqueta
                         para el campo "id_card". #}
-                        <div class="input-group"> {# Un div para agrupar dos elementos relacionados. #}
+                        <div class="input-group"> 
+                            {# Un div para agrupar dos elementos relacionados. #}
                             {{ form.id_card_type(class="form-select") }} {# Un campo de selección para el tipo de
                             documento, con la clase "form-select" de Bootstrap. #}
                             {{ form.id_card(class="form-control") }} {# Un campo de texto para el número de

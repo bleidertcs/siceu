@@ -1,219 +1,160 @@
-{% extends 'base.html' %} <!-- Extiende la plantilla base definida en base.html -->
-{% block content %} <!-- Inicia el bloque de contenido que se insertará en la plantilla base -->
+{% extends 'base.html' %}
+{% block content %}
 
-{% if horario %} <!-- Si la variable "horario" existe, se mostrará la tabla del horario generado -->
-<!-- Si el horario ya se generó, se muestra la tabla final generada -->
-<h2 class="text-center mb-4">Horario</h2> <!-- Título principal centrado con margen inferior -->
-<table class="table table-bordered"> <!-- Inicia la tabla con clases de Bootstrap para formato y bordes -->
-    <thead> <!-- Inicio de la cabecera de la tabla -->
-        <tr> <!-- Fila de la cabecera -->
-            <th>Hora</th> <!-- Encabezado de la columna de hora -->
-            <th>Lunes</th> <!-- Encabezado de la columna de Lunes -->
-            <th>Martes</th> <!-- Encabezado de la columna de Martes -->
-            <th>Miercoles</th> <!-- Encabezado de la columna de Miercoles -->
-            <th>Jueves</th> <!-- Encabezado de la columna de Jueves -->
-            <th>Viernes</th> <!-- Encabezado de la columna de Viernes -->
+{% if horario %}
+<!-- Display the generated schedule (assuming horario is a properly formatted data structure) -->
+<h2>Horario</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Hora</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
         </tr>
     </thead>
-    <tbody> <!-- Inicio del cuerpo de la tabla -->
-        {% for i in range(horas|length) %} <!-- Recorre la lista "horas" para crear cada fila con su rango de hora -->
-        <tr> <!-- Crea una nueva fila para la hora actual -->
-            <td>{{ horas[i] }}</td>
-            <!-- Primera celda de la fila: muestra el rango de hora (por ejemplo, "8:00-8:45 AM") -->
-            {% for dia in dias %} <!-- Recorre cada día de la semana (Lunes a Viernes) -->
-            <td> <!-- Celda que representa un día de la semana -->
-                {% for bloque in horario[dia]["bloques"] %} <!-- Dentro de cada día, recorre los bloques asignados -->
-                {% if bloque.inicio == horas_formatted[i] %}
-                <!-- Si el inicio del bloque coincide con la hora formateada actual -->
-                {{ bloque.nombre }} <!-- Muestra el nombre de la materia asignada a ese bloque -->
-                {% endif %} <!-- Fin de comprobación del inicio del bloque -->
-                {% endfor %} <!-- Fin del bucle que recorre los bloques de ese día -->
-            </td> <!-- Fin de la celda del día -->
-            {% endfor %} <!-- Fin del bucle para cada día -->
-        </tr> <!-- Fin de la fila para la hora actual -->
-        {% endfor %} <!-- Fin del bucle de horas -->
-    </tbody> <!-- Fin del cuerpo de la tabla -->
-</table> <!-- Fin de la tabla -->
-{% else %} <!-- Si no existe la variable "horario", se muestra el formulario para seleccionar materias -->
-<div class="container mt-5"> <!-- Contenedor principal con margen superior -->
-    <div class="row"> <!-- Inicia una fila de Bootstrap -->
-        <div class="col-md-10 offset-md-1"> <!-- Columna centrada que ocupa 10 columnas en pantallas medianas -->
-            <div class="card shadow"> <!-- Tarjeta con efecto de sombra para resaltar el contenido -->
-                <div class="card-body p-5"> <!-- Cuerpo interno de la tarjeta con padding -->
-                    <h2 class="card-title text-center mb-4">UNEFA</h2> <!-- Título principal de la tarjeta -->
+    <tbody>
+        {% for hour in hours %}
+        <tr>
+            <td>{{ hour }}</td>
+            {% for day in dias %}
+            <td>
+                {% for materia in horario[day] %}
+                {% if materia.hora == hour %}
+                {{ materia.nombre }}<br>
+                {% endif %}
+                {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2>UNEFA</h2>
                     <h1>Selección de Materias y Horario</h1>
-                    <!-- Encabezado secundario para la acción que se realizará -->
-
-                    <!-- Inicio del formulario para agregar materias y asignarlas a un horario -->
-                    <form method="POST" id="materiasForm"> <!-- Formulario que envía datos mediante método POST -->
-                        <div class="mb-3"> <!-- Div con margen inferior que contiene el select -->
+                    <form method="POST" id="materiasForm">
+                        <div class="mb-3">
                             <label for="materiasSelect" class="form-label">Materias Disponibles</label>
-                            <!-- Etiqueta que indica el propósito del select -->
                             <select id="materiasSelect" class="form-select">
-                                <!-- Elemento select para elegir materias -->
-                                <option value="">Seleccionar materia</option> <!-- Opción por defecto (vacía) -->
-                                {% for materia in materias %} <!-- Bucle que recorre cada materia disponible -->
-                                <option value="{{ materia.nombre }}" data-dias="{{ materia.dias|join(',') }}">
-                                    <!-- Opción que contiene:
-                                         - value: nombre de la materia.
-                                         - data-dias: días en los que se dicta, unidos por coma (sin espacios) -->
-                                    {{ materia.nombre }} - {{ materia.profesor }} ({{ materia.dias|join(', ') }})
-                                    <!-- Texto que se muestra: nombre de la materia, profesor y lista de días -->
+                                <option value="">Seleccionar materia</option>
+                                {% for materia in materias %}
+                                <option value="{{ materia.nombre }}" data-dias="{{ materia.dias|join(',') }}"
+                                    data-horas="{{ materia.hora|join(',') }}">
+                                    {{ materia.nombre }} - {{ materia.profesor }} ({{ materia.dias|join(', ') }}) - {{
+                                    materia.hora|join(' / ') }}
                                 </option>
-                                {% endfor %} <!-- Fin del bucle de materias -->
-                            </select> <!-- Fin del select -->
-                        </div> <!-- Fin del div del select -->
-
-                        <!-- Botón para agregar la materia al horario -->
+                                {% endfor %}
+                            </select>
+                        </div>
                         <button type="button" id="addMateriaBtn" class="btn btn-secondary">Agregar Materia</button>
-
-                        <hr> <!-- Línea horizontal para separar secciones -->
-
-                        <!-- Vista previa del horario en forma de tabla que se llenará dinámicamente -->
-                        <h3>Vista Previa del Horario</h3> <!-- Título de la sección de vista previa -->
+                        <hr>
+                        <h3>Vista Previa del Horario</h3>
                         <table class="table table-bordered" id="tablaMaterias">
-                            <!-- Tabla con bordes para mostrar la vista previa del horario -->
-                            <thead> <!-- Cabecera de la tabla -->
-                                <tr> <!-- Fila de encabezados -->
-                                    <th>Hora</th> <!-- Encabezado para la columna de horas -->
-                                    <th>Lunes</th> <!-- Encabezado para Lunes -->
-                                    <th>Martes</th> <!-- Encabezado para Martes -->
-                                    <th>Miercoles</th> <!-- Encabezado para Miercoles -->
-                                    <th>Jueves</th> <!-- Encabezado para Jueves -->
-                                    <th>Viernes</th> <!-- Encabezado para Viernes -->
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Lunes</th>
+                                    <th>Martes</th>
+                                    <th>Miércoles</th>
+                                    <th>Jueves</th>
+                                    <th>Viernes</th>
                                 </tr>
                             </thead>
-                            <tbody> <!-- Cuerpo de la tabla; aquí se agregarán filas dinámicamente -->
-                                <!-- Se crearán filas dinámicamente al asignar una materia -->
-                            </tbody>
+                            <tbody></tbody>
                         </table>
-
-                        <!-- Botón para guardar y generar el PDF del horario -->
                         <button type="button" id="guardarBtn" class="btn btn-primary">Guardar y Generar PDF</button>
-                    </form> <!-- Fin del formulario -->
-                </div> <!-- Fin del cuerpo interno de la tarjeta -->
-            </div> <!-- Fin de la tarjeta -->
-        </div> <!-- Fin de la columna centrada -->
-    </div> <!-- Fin de la fila -->
-</div> <!-- Fin del contenedor principal -->
-
-<!-- Inicio del script de JavaScript para asignar materias dinámicamente a la tabla del horario -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
-    // Mapeo de cada día a su índice de columna en la tabla:
-    // La columna 0 es "Hora", por eso Lunes empieza en la columna 1, y así sucesivamente.
     const diasMapping = {
-        "Lunes": 1,      // Asocia "Lunes" con la columna 1
-        "Martes": 2,     // Asocia "Martes" con la columna 2
-        "Miercoles": 3,  // Asocia "Miercoles" con la columna 3
-        "Jueves": 4,     // Asocia "Jueves" con la columna 4
-        "Viernes": 5     // Asocia "Viernes" con la columna 5
+        "Lunes": 1,
+        "Martes": 2,
+        "Miércoles": 3,
+        "Jueves": 4,
+        "Viernes": 5
     };
 
-    // Función para buscar si ya existe una fila en la tabla con la hora especificada
     function buscarFilaPorHora ( hora )
     {
-        // Se obtiene el cuerpo (tbody) de la tabla de horario
         const tbody = document.getElementById( 'tablaMaterias' ).getElementsByTagName( 'tbody' )[ 0 ];
-        // Se recorre cada fila de la tabla
         for ( let row of tbody.rows )
         {
-            // Se compara el texto de la primera celda (hora) con la hora proporcionada (después de recortar espacios)
             if ( row.cells[ 0 ].textContent.trim() === hora.trim() )
             {
-                return row; // Retorna la fila existente si la hora coincide
+                return row;
             }
         }
-        return null; // Retorna null si no se encontró ninguna fila con esa hora
+        return null;
     }
 
-    // Función para crear una nueva fila en la tabla para una hora específica
     function crearFilaHorario ( hora )
     {
-        // Se obtiene el cuerpo (tbody) de la tabla
         const tbody = document.getElementById( 'tablaMaterias' ).getElementsByTagName( 'tbody' )[ 0 ];
-        // Se inserta una nueva fila al final del tbody
         const row = tbody.insertRow();
-        // Se inserta la primera celda y se asigna la hora indicada
         const cellHora = row.insertCell( 0 );
         cellHora.textContent = hora;
-        // Se crean 5 celdas vacías para los días Lunes a Viernes
         for ( let i = 1; i <= 5; i++ )
         {
             row.insertCell( i ).textContent = "";
         }
-        return row; // Retorna la nueva fila creada
+        return row;
     }
 
-    // Se añade un evento al botón "Agregar Materia" para que se ejecute al hacer clic
     document.getElementById( 'addMateriaBtn' ).addEventListener( 'click', function ()
     {
-        // Se obtiene el select de materias
         const select = document.getElementById( 'materiasSelect' );
-        // Se obtiene la opción actualmente seleccionada en el select
         const selectedOption = select.options[ select.selectedIndex ];
 
-        // Si se ha seleccionado una materia (valor distinto de vacío)
         if ( selectedOption.value !== "" )
         {
-            // Guarda el nombre de la materia seleccionada
             const materiaNombre = selectedOption.value;
-            // Obtiene los días en los cuáles se imparte la materia desde el atributo "data-dias"
             const diasMateria = selectedOption.getAttribute( 'data-dias' ).split( ',' ).map( d => d.trim() );
+            const horasMateria = selectedOption.getAttribute( 'data-horas' ).split( ',' ).map( h => h.trim() );
 
-            // Pide al usuario que ingrese la hora en la que se asignará esta materia (por ejemplo "8:00-8:45 AM")
-            const horaAsignacion = prompt( `Ingrese la hora para ${ materiaNombre } (ejemplo: "8:00-8:45 AM"):` );
-
-            // Si el usuario no ingresa una hora, muestra un mensaje de alerta y cancela la operación
-            if ( !horaAsignacion )
+            horasMateria.forEach( hora =>
             {
-                alert( 'Debe ingresar una hora válida.' );
-                return; // Sale de la función sin hacer nada más
-            }
-
-            // Busca una fila en la tabla que ya tenga la hora ingresada
-            let fila = buscarFilaPorHora( horaAsignacion );
-            // Si no existe una fila con esa hora, se crea una nueva
-            if ( !fila )
-            {
-                fila = crearFilaHorario( horaAsignacion );
-            }
-
-            // Para cada día que corresponda a la materia...
-            diasMateria.forEach( function ( dia )
-            {
-                // Se obtiene el índice de columna correspondiente al día usando el mapeo definido
-                const colIndex = diasMapping[ dia ];
-                if ( colIndex !== undefined )
-                { // Si se encontró un índice válido para el día
-                    // Si la celda correspondiente ya tiene contenido, se agrega la nueva materia en una línea separada
-                    if ( fila.cells[ colIndex ].textContent.trim() !== "" )
-                    {
-                        fila.cells[ colIndex ].innerHTML += "<br>" + materiaNombre;
-                    } else
-                    {
-                        // Si la celda está vacía, se asigna directamente el nombre de la materia
-                        fila.cells[ colIndex ].textContent = materiaNombre;
-                    }
+                let fila = buscarFilaPorHora( hora );
+                if ( !fila )
+                {
+                    fila = crearFilaHorario( hora );
                 }
+                diasMateria.forEach( dia =>
+                {
+                    const colIndex = diasMapping[ dia ];
+                    if ( colIndex !== undefined )
+                    {
+                        if ( fila.cells[ colIndex ].textContent.trim() !== "" )
+                        {
+                            fila.cells[ colIndex ].textContent += `\n${ materiaNombre }`; // Add newlines to separate materias
+                        } else
+                        {
+                            fila.cells[ colIndex ].textContent = materiaNombre;
+                        }
+                    }
+                } );
             } );
-
-            // Luego de asignar la materia a la tabla, se elimina esa opción del select para evitar duplicados
             select.remove( select.selectedIndex );
-            // Se resetea el select a la opción por defecto (vacía)
             select.selectedIndex = 0;
         }
     } );
 
-    // Se añade un evento al botón "Guardar y Generar PDF"
-    document.getElementById( 'guardarBtn' ).addEventListener( 'click', function ()
+    document.getElementById( 'guardarBtn' ).addEventListener( 'click', () =>
     {
-        // Aquí se implementaría la funcionalidad para generar un PDF del horario.
-        // Por ejemplo, se puede utilizar una biblioteca específica para PDF.
-        // Como ejemplo rápido, se utiliza window.print() para abrir el diálogo de impresión, 
-        // lo que permite en muchos navegadores guardar la página como PDF.
-        window.print();
+        window.print(); // Replace with actual PDF generation logic
     } );
 </script>
-{% endif %} <!-- Fin del condicional: si existe "horario" se muestra la tabla, de lo contrario el formulario -->
 
-{% endblock %} <!-- Fin del bloque de contenido -->
+{% endif %}
+{% endblock %}

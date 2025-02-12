@@ -1,9 +1,9 @@
 body {
   /* add image from mi asstet */
 
-  /* Se establece la imagen de fondo del body. 
+  /* establecemos la imagen de fondo del body. 
   La ruta  "../static/fondo.png" indica que la imagen se encuentra en la carpeta static un nivel arriba.
-  Puedes intercambiarla con la imagen comentada "klei.png" si así lo deseas */
+  Puedes intercambiarla con la imagen comentada "klei.png" */
   background-image: url("../static/fondo.png");
   /* background-image: url("../static/klei.png"); */
 
