@@ -64,12 +64,6 @@ horas = [
     "10:45 - 11:30 AM",
     "11:30 - 12:15 PM",
     "12:15 - 1:00 PM",
-    "1:00 - 1:45 PM",
-    "1:45 - 2:30 PM",
-    "2:30 - 3:15 PM",
-    "3:15 - 4:00 PM",
-    "4:00 - 4:45 PM",
-    "4:45 - 5:30 PM",  # Added more hours
 ]
 
 # Se crea el esquema de la base de datos al entrar en el contexto de la aplicación.
