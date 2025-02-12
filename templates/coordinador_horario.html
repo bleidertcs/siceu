@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <h1 class="display-5 mb-4 text-primary">Horario Profesor - Modo Coordinador</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="card shadow-lg mb-5">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Agregar Nueva Materia</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="nombre_materia" name="nombre_materia" required>
+                            <label for="nombre_materia">Nombre de la Materia</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="nombre_profesor" name="nombre_profesor"
+                                required>
+                            <label for="nombre_profesor">Nombre del Profesor</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <h6 class="mt-3 mb-2 text-secondary">Horas de Clase</h6>
+                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-2">
+                            {% for hora in horas %}
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="{{hora}}" name="horas_clase"
+                                        value="{{hora}}">
+                                    <label class="form-check-label" for="{{hora}}">{{hora}}</label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <h6 class="mt-3 mb-2 text-secondary">Días de la Semana</h6>
+                        <div class="d-flex flex-wrap gap-3">
+                            {% for dia in dias_semana %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="{{ dia }}" name="dias_seleccionados"
+                                    value="{{ dia }}">
+                                <label class="form-check-label" for="{{ dia }}">{{ dia }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-end mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-save me-2"></i>Guardar Materia
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h5 class="card-title mb-0">Materias Programadas</h5>
+        </div>
+        <div class="card-body">
+            {% if materias %}
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for materia in materias %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ materia.nombre }}</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Profesor:</strong> {{ materia.profesor }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Horas:</strong> {{ materia.hora|join(', ') }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Días:</strong> {{ materia.dias|join(', ') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning mb-0">No hay materias programadas actualmente</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

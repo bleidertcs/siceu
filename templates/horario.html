@@ -2,81 +2,107 @@
 {% block content %}
 
 {% if horario %}
-<!-- Display the generated schedule (assuming horario is a properly formatted data structure) -->
-<h2>Horario</h2>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Hora</th>
-            <th>Lunes</th>
-            <th>Martes</th>
-            <th>Miércoles</th>
-            <th>Jueves</th>
-            <th>Viernes</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for hour in hours %}
-        <tr>
-            <td>{{ hour }}</td>
-            {% for day in dias %}
-            <td>
-                {% for materia in horario[day] %}
-                {% if materia.hora == hour %}
-                {{ materia.nombre }}<br>
-                {% endif %}
+<div class="container mt-5">
+    <h2>Horario Generado</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hour in hours %}
+            <tr>
+                <td>{{ hour }}</td>
+                {% for day in dias %}
+                <td>
+                    {% for materia in horario[day] %}
+                    {% if materia.hora == hour %}
+                    <span class="badge bg-primary text-light mb-1 d-block">{{ materia.nombre }}</span>
+                    {% endif %}
+                    {% endfor %}
+                </td>
                 {% endfor %}
-            </td>
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 {% else %}
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-10 offset-md-1">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <h2>UNEFA</h2>
-                    <h1>Selección de Materias y Horario</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h2 class="mb-0">Horario Estudiante</h2>
+                </div>
+                <div class="card-body p-4">
+                    <h5 class="card-title text-center mb-4">Agregar Nueva Materia</h5>
                     <form method="POST" id="materiasForm">
-                        <div class="mb-3">
-                            <label for="materiasSelect" class="form-label">Materias Disponibles</label>
-                            <select id="materiasSelect" class="form-select">
-                                <option value="">Seleccionar materia</option>
-                                {% for materia in materias %}
-                                <option value="{{ materia.nombre }}" data-dias="{{ materia.dias|join(',') }}"
-                                    data-horas="{{ materia.hora|join(',') }}">
-                                    {{ materia.nombre }} - {{ materia.profesor }} ({{ materia.dias|join(', ') }}) - {{
-                                    materia.hora|join(' / ') }}
-                                </option>
-                                {% endfor %}
-                            </select>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select id="materiasSelect" class="form-select">
+                                        <option value="">Seleccionar materia</option>
+                                        {% for materia in materias %}
+                                        <option value="{{ materia.nombre }}" data-dias="{{ materia.dias|join(',') }}"
+                                            data-horas="{{ materia.hora|join(',') }}">
+                                            {{ materia.nombre }} - {{ materia.profesor }} ({{ materia.dias|join(', ')
+                                            }}) -
+                                            {{ materia.hora|join(' / ') }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="materiasSelect">Materias Disponibles</label>
+                                </div>
+                            </div>
                         </div>
-                        <button type="button" id="addMateriaBtn" class="btn btn-secondary">Agregar Materia</button>
-                        <hr>
-                        <h3>Vista Previa del Horario</h3>
-                        <table class="table table-bordered" id="tablaMaterias">
-                            <thead>
-                                <tr>
-                                    <th>Hora</th>
-                                    <th>Lunes</th>
-                                    <th>Martes</th>
-                                    <th>Miércoles</th>
-                                    <th>Jueves</th>
-                                    <th>Viernes</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        <button type="button" id="guardarBtn" class="btn btn-primary">Guardar y Generar PDF</button>
+
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="button" id="addMateriaBtn" class="btn btn-secondary">Agregar Materia</button>
+                        </div>
+
+                        <div class="card border-light shadow-sm mb-4">
+                            <div class="card-header bg-light py-2">
+                                <h6 class="mb-0 fw-bold"><i class="bi bi-table me-2"></i> Vista Previa del Horario</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" id="tablaMaterias">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Hora</th>
+                                                <th>Lunes</th>
+                                                <th>Martes</th>
+                                                <th>Miércoles</th>
+                                                <th>Jueves</th>
+                                                <th>Viernes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="d-grid gap-2">
+                            <button type="button" id="guardarBtn" class="btn btn-primary"><i
+                                    class="bi bi-download me-2"></i> Guardar y Generar PDF</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     const diasMapping = {
         "Lunes": 1,
@@ -137,10 +163,10 @@
                     {
                         if ( fila.cells[ colIndex ].textContent.trim() !== "" )
                         {
-                            fila.cells[ colIndex ].textContent += `\n${ materiaNombre }`; // Add newlines to separate materias
+                            fila.cells[ colIndex ].innerHTML += `<br><span class="mb-1 d-block">${ materiaNombre }</span>`; // Using innerHTML to render badge
                         } else
                         {
-                            fila.cells[ colIndex ].textContent = materiaNombre;
+                            fila.cells[ colIndex ].innerHTML = `<span class="mb-1 d-block">${ materiaNombre }</span>`; // Using innerHTML to render badge
                         }
                     }
                 } );

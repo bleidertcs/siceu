@@ -52,24 +52,24 @@ materias = [
         "profesor": "Carlos Estrada",
         "dias": ["Lunes", "Viernes"],
     },
-    {
-        "nombre": "Geometria",
-        "hora": ["8:30 - 9:15 AM ", " 9:15 - 10:00 AM"],
-        "profesor": "Miguel Espinosa",
-        "dias": ["Martes", "Miercoles"],
-    },
-    {
-        "nombre": "Seminario",
-        "hora": ["10:00 - 10:45 AM"],
-        "profesor": "Andres Suarez",
-        "dias": ["Jueves"],
-    },
-    {
-        "nombre": "Ingles",
-        "hora": ["8:30 - 9:15 AM", "9:15 - 10:00 AM"],
-        "profesor": "Carla Suset",
-        "dias": ["Jueves", "Viernes"],
-    },
+]
+
+dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
+horas = [
+    "7:00 - 7:45 AM",
+    "7:45 - 8:30 AM",
+    "8:30 - 9:15 AM",
+    "9:15 - 10:00 AM",
+    "10:00 - 10:45 AM",
+    "10:45 - 11:30 AM",
+    "11:30 - 12:15 PM",
+    "12:15 - 1:00 PM",
+    "1:00 - 1:45 PM",
+    "1:45 - 2:30 PM",
+    "2:30 - 3:15 PM",
+    "3:15 - 4:00 PM",
+    "4:00 - 4:45 PM",
+    "4:45 - 5:30 PM",  # Added more hours
 ]
 
 # Se crea el esquema de la base de datos al entrar en el contexto de la aplicación.
@@ -155,9 +155,9 @@ def dashboard():
     if (
         "user_id" in session
     ):  # Se verifica si el usuario está autenticado (existe "user_id" en la sesión)
-        user = User.query.filter_by(
-            id=session["user_id"]
-        ).first()  # Se obtiene el usuario de la base de datos usando el id almacenado en la sesión
+        user = User.query.get(
+            session["user_id"]
+        )  # Se obtiene el usuario de la base de datos usando el id almacenado en la sesión
         return render_template(
             "dashboard.html", user=user
         )  # Se renderiza la plantilla del dashboard pasando el usuario
@@ -178,6 +178,38 @@ def horario():
         )  # Se redirige a la ruta que mostrará el horario generado
     # Si el método es GET, se renderiza la plantilla de horario mostrando las materias disponibles
     return render_template("horario.html", materias=materias)
+
+
+@app.route("/coordinador_horario", methods=["GET", "POST"])
+def coordinador_horario():
+    if "user_id" not in session or not session["user_id"]:
+        return redirect(url_for("login"))  # Redirect if not logged in
+    user = User.query.get(session["user_id"])
+    if user.role != "coordinador":
+        return redirect(url_for("dashboard"))  # Redirect if not coordinator
+
+    if request.method == "POST":
+        nombre_materia = request.form["nombre_materia"]
+        nombre_profesor = request.form["nombre_profesor"]
+        horas_clase = request.form.getlist("horas_clase")  # Get list of selected hours
+        dias_seleccionados = request.form.getlist("dias_seleccionados")
+
+        nueva_materia = {
+            "nombre": nombre_materia,
+            "hora": horas_clase,
+            "profesor": nombre_profesor,
+            "dias": dias_seleccionados,
+        }
+        materias.append(nueva_materia)  # Add to the materias list
+        flash("Materia agregada correctamente.", "success")
+        return redirect(url_for("coordinador_horario"))
+
+    return render_template(
+        "coordinador_horario.html",
+        dias_semana=dias_semana,
+        horas=horas,
+        materias=materias,
+    )
 
 
 # Ruta para cerrar la sesión del usuario.

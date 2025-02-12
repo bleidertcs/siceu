@@ -34,15 +34,20 @@ denominada
                                     centrado. #}
                                     <i class="fas fa-user-graduate fa-3x mb-3 text-primary"></i> {# Inserta un ícono de
                                     graduado (Font Awesome), tamaño 3x, con margen inferior de 3 y color primario. #}
-                                    <h5 class="card-title">Información del Estudiante</h5> {# Título de la tarjeta que
-                                    indica la sección de "Información del Estudiante". #}
+
+                                    <h5 class="card-title">Información del {{ user.role.capitalize() }}</h5> {# Título
+                                    de la
+                                    tarjeta
+                                    que
+                                    indica la sección de "Información del {{user.role}}". #}
                                     <p class="card-text">Consulta y actualiza tu información personal.</p> {# Texto
                                     descriptivo que invita a revisar y actualizar la información personal. #}
                                     <a href="#" class="btn btn-primary">Ver Perfil</a> {# Enlace estilizado como botón
-                                    primario que permite ver el perfil del estudiante. #}
+                                    primario que permite ver el perfil. #}
                                 </div> {# Cierra el div del cuerpo de la tarjeta. #}
                             </div> {# Cierra la tarjeta. #}
                         </div> {# Cierra la columna de "Información del Estudiante". #}
+                        {% if user.role == 'estudiante' %}
                         <div class="col-md-6 mb-4"> {# Comienza una nueva columna para la sección "Horario de Clases",
                             ocupando 6 unidades en pantallas medianas y con margen inferior de 4. #}
                             <div class="card h-100"> {# Crea una tarjeta que ocupa el 100% de la altura de la columna.
@@ -56,31 +61,28 @@ denominada
                                     "Horario de Clases". #}
                                     <p class="card-text">Crea tu horario de clases.</p> {# Texto descriptivo que invita
                                     al usuario a crear su horario de clases. #}
-                                    <a href="{{ url_for('horario') }}" class="btn btn-success">Crear Horario</a> {#
+
+                                    <a href="{{ url_for('horario') }}" class="btn btn-success">Crear Horario</a>
+                                    {#
                                     Enlace estilizado como botón de éxito que redirige a la ruta de "horario" para crear
                                     el horario de clases. #}
                                 </div> {# Cierra el div del cuerpo de la tarjeta. #}
                             </div> {# Cierra la tarjeta. #}
                         </div> {# Cierra la columna de "Horario de Clases". #}
-                        <div class="col-md-6 mb-4"> {# Comienza otra columna para la sección "Materias Inscritas",
-                            ocupando 6 unidades y con margen inferior de 4. #}
-                            <div class="card h-100"> {# Crea una tarjeta que abarca toda la altura disponible de la
-                                columna. #}
-                                <div class="card-body text-center"> {# Define el cuerpo de la tarjeta con texto
-                                    centrado. #}
-                                    <i class="fas fa-book fa-3x mb-3 text-warning"></i> {# Inserta un ícono de libro
-                                    (Font Awesome), tamaño 3x, margen inferior 3 y color de advertencia (amarillo). #}
-                                    <h5 class="card-title">Materias Inscritas</h5> {# Título de la tarjeta que indica
-                                    "Materias Inscritas". #}
-                                    <p class="card-text">Revisa los Materias en los que te has inscrito.</p> {# Texto
-                                    descriptivo que invita al usuario a revisar las materias en las que está inscrito.
-                                    #}
-                                    <a href="#" class="btn btn-warning">Mis Materias</a> {# Enlace estilizado como botón
-                                    de advertencia que, en este ejemplo, redirige a la página de materias inscritas
-                                    (enlace actualmente no funcional). #}
-                                </div> {# Cierra el div del cuerpo de la tarjeta. #}
-                            </div> {# Cierra la tarjeta. #}
-                        </div> {# Cierra la columna de "Materias Inscritas". #}
+                        {% endif %} {# Cierra el bloque condicional que verifica si el usuario es un estudiante. #}
+                        {% if user.role == 'coordinador' %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chalkboard-teacher fa-3x mb-3 text-info"></i>
+                                    <h5>Horario de Profesores</h5>
+                                    <p class="card-text">Administra los horarios de los profesores.</p>
+                                    <a href="{{ url_for('coordinador_horario') }}" class="btn btn-info">Gestionar
+                                        Horarios</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div> {# Cierra la fila que contiene las tarjetas. #}
                 </div> {# Cierra el cuerpo interno de la tarjeta principal. #}
             </div> {# Cierra la tarjeta principal. #}
